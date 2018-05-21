@@ -24,10 +24,7 @@ document.body.appendChild(
 ### Preact / gl-component
 
 ```jsx
-let h = require('jsxify')({
-	preact: require('jsxify/preact'),
-	glComponent: require('jsxify/gl-component')
-})
+let h = require('jsxify')(require('preact').createElement)
 
 () => (
 	<Menu>
@@ -107,7 +104,8 @@ h.add({a: compo1, b: widget, c: directHTML, d: vdom})
 * [webcomponent](https://www.npmjs.com/package/webcomponent)
 * [virtual-dom](https://www.npmjs.com/package/virtual-dom)
 * [lit-element](https://github.com/Polymer/lit-element)
-* [svelte]()
+* [fun-component](https://github.com/tornqvist/fun-component)
+* [svelte](https://github.com/sveltejs/svelte)
 
 ## Similar
 
@@ -116,9 +114,9 @@ h.add({a: compo1, b: widget, c: directHTML, d: vdom})
 
 ## Motivation
 
-Creating a centralized type of component and then providing a bunch of adapters does not seem to be feasible task, since there is huge amount of various framework-based components - converting all of them to another one UI framework would be a massive task.
+Creating a centralized type of component, alike to `hyperdom` or many others, and then providing adapters does not seem to be feasible task, since there is huge amount of various framework-based components - converting all of them to another one UI framework would be a massive task.
 
-Instead, providing a bunch of adapters for frameworks and enabling JSX → HTML conversion would wash out framework differences and unite them into a single unopinionated workflow.
+Instead, providing adapters for frameworks and enabling JSX → HTML/vdom conversion would erase framework differences and create single unopinionated workflow.
 
 ## License
 
