@@ -1,0 +1,46 @@
+{
+  "name": "jsxify",
+  "version": "2.0.0",
+  "description": "Enable JSX for everything",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/dy/jsxify.git"
+  },
+  "devDependencies": {
+    "jsx-transform": "^2.4.0",
+    "nanocomponent": "^6.5.2",
+    "nanohtml": "^1.2.4",
+    "tape": "^4.9.0"
+  },
+  "scripts": {
+    "test": "buto test"
+  },
+  "browserify": {
+    "transform": [
+      [
+        "jsx-transform/browserify",
+        {
+          "factory": "h",
+          "passUnknownTagsToFactory": true,
+          "unknownTagsAsString": true
+        }
+      ]
+    ]
+  },
+  "keywords": [
+    "jsx",
+    "react",
+    "nanocomponent",
+    "jsx-transform",
+    "babel",
+    "hyperscript",
+    "babel-react"
+  ],
+  "author": "Dmitry Yv <df.creative@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "hyperscript": "^2.0.2",
+    "is-class": "0.0.4"
+  }
+}
