@@ -61,17 +61,7 @@ module.exports = function jsxify (a, b) {
 			if (isClass(component)) {
 				// Nanocomponent
 				if (component.prototype.__proto__.constructor.name) {
-					componentCache[name] = {
-						init: (props, children) => {
-							return new component
-						},
-						update: (instance, props, children) => {
-							return instance.render(props)
-						},
-						destroy: () => {
-
-						}
-					}
+					componentCache[name] = lib.nanocomponent
 				}
 			}
 		}

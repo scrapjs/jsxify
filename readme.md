@@ -9,7 +9,7 @@ Enables JSX for any type of component: virtual dom, vue, react, nanocomponent, b
 ### Nanocomponent
 
 ```jsx
-let h = require('jsxify')(require('hyperscript'))
+let h = require('jsxify/dom')
 h.add('NanoButton', require('./nanobutton'))
 h.add('Scatter2d', require('@a-vis/scatter2d'))
 
@@ -24,7 +24,7 @@ document.body.appendChild(
 ### Preact / gl-component
 
 ```jsx
-let h = require('jsxify')(require('preact').createElement)
+let h = require('jsxify/vdom')
 
 () => (
 	<Menu>
@@ -75,16 +75,22 @@ setTimeout(() => {
 
 ## API
 
-### h = require('jsxify')(components, options?)
+### h = require('jsxify/dom')
 
-// return component instance or permanent component state
+Turn JSX into DOM with [hyperscript]() package.
 
-Option | Meaning
----|---
-`h` | Function returning the node. Can be virtual-dom, react, hyperscript or any other hyperscript-compatible function.
-`portal` | Enable `container` property to automatically mount part of the tree to defined target.
+### h = require('jsxify/vdom')
 
-TODO: make sure these options are necessary. Mb we could collapse update by `key`/`container` property.
+Turn JSX into virtual DOM with [virtual-dom]() package.
+
+### h = require('jsxify/react')
+
+Turn JSX into react virtual DOM.
+
+### h = require('jsxify')(createElement)
+
+Turn JSX into any hyperscript-compatible structure.
+
 
 ### h.add(components)
 
