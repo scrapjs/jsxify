@@ -1,6 +1,7 @@
 'use strict'
 
 var isClass = require('is-class')
+var lib = require('./lib')
 
 module.exports = function jsxify (a, b) {
 	var components, h
@@ -27,9 +28,9 @@ module.exports = function jsxify (a, b) {
 		if (!component) return h(name, props, children)
 
 
-		var update = component.update || component.render || component.rerender || component.refresh
+		var update = component.render || component.update || component.rerender || component.refresh
 		var create = component.create || component.init || component.constructor
-		var destroy = component.destroy || component.destructor || component.dispose
+		var destroy = component.destroy || component.destructor || component.dispose || component.remove || component.delete
 
 		var content
 

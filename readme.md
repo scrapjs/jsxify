@@ -10,8 +10,8 @@ Enables JSX for any type of component: virtual dom, vue, react, nanocomponent, b
 
 ```jsx
 let h = require('jsxify/dom')
-h.add('NanoButton', require('./nanobutton'))
-h.add('Scatter2d', require('@a-vis/scatter2d'))
+h.add(require('./nanobutton'))
+h.add(require('@a-vis/scatter2d'))
 
 document.body.appendChild(
 <main>
@@ -25,6 +25,8 @@ document.body.appendChild(
 
 ```jsx
 let h = require('jsxify/vdom')
+import {Menu, MenuItem} from 'react-toolbox/menu'
+h.add(Menu, MenuItem)
 
 () => (
 	<Menu>
@@ -44,23 +46,22 @@ let h = require('jsxify/vdom')
 
 ### Custom component
 
-To enable JSX for your custom component, you have to just implement 3 lifecycle methods: `init`, `update` and `destroy`. `jsxify` will take care of the rest: keying, repurposing,
+To enable JSX for your custom component, you have to implement 3 lifecycle methods: `create`, `render` and `destroy`. `jsxify` will take care of the rest: keying, repurposing,
 
 ```jsx
 let CC = require('my-compo')
-let h = require('jsxify')({
-	CustomComponent: {
-		init: (props, children) => {
-			return new CC(props)
-		},
-		update: (instance, props, children) => {
-			instance.render(props)
+let h = require('jsxify/dom')
+h.add('CustomComponent', {
+	create: (props, children) => {
+		return new CC(props)
+	},
+	render: (instance, props, children) => {
+		instance.render(props)
 
-			return instance.element
-		},
-		destroy: () => {
+		return instance.element
+	},
+	destroy: () => {
 
-		}
 	}
 })
 
@@ -75,30 +76,51 @@ setTimeout(() => {
 
 ## API
 
-### h = require('jsxify/dom')
+### `h = require('jsxify/dom')`
 
 Turn JSX into DOM with [hyperscript]() package.
 
-### h = require('jsxify/vdom')
+### `h = require('jsxify/vdom')`
 
 Turn JSX into virtual DOM with [virtual-dom]() package.
 
-### h = require('jsxify/react')
+### `h = require('jsxify/react')`
 
 Turn JSX into react virtual DOM.
 
-### h = require('jsxify')(createElement)
+### `h = require('jsxify')(createElement)`
 
 Turn JSX into any hyperscript-compatible structure.
 
 
-### h.add(components)
+### `h.add(name?, component)`
 
-Add a list of components or a single component.
+Add a component by name. If name is skipped, default component name will be used.
 
-```jsx
-h.add({a: compo1, b: widget, c: directHTML, d: vdom})
+```js
+// add Menu and MenuItem components
+h.add(require('react-toolbox/menu'))
+
+// register menu component as ReactMenu
+h.add('ReactMenu', require('react-toolbox/menu'))
 ```
+
+### `h.add({name: component, ...})`
+
+Register dict of components.
+
+### `h.add([component1, component2, ...])`
+
+Add list of components or a single component. Component names are taken from packages.
+
+```js
+// register all react-toolbox components
+h.add(require('react-toolbox'))
+```
+
+### `jsxify` browserify transform
+
+Analyses statically which frameworks are being used and includes only necessary ones. For example, if no react components are detected in the package, it won't include react.
 
 
 ## Supported components
