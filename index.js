@@ -3,6 +3,7 @@
 var isClass = require('is-class')
 var lib = require('./lib')
 
+
 module.exports = function jsxify (a, b) {
 	var components, h
 
@@ -49,11 +50,15 @@ module.exports = function jsxify (a, b) {
 	}
 
 	function detect (compo) {
-		if (typeof compo === 'string') {
-			component = componentCache[name]
-			if (!component) throw Error('Undefined component `' + component + '`. Use `jsxify.add()` to register components.')
-		}
+		// h('div'
 
+		// h(document.body
+
+		// h(VNode
+
+		// h(ReactEl
+
+		// h(PreactEl
 	}
 
 	function add (components) {

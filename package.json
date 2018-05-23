@@ -11,6 +11,8 @@
     "jsx-transform": "^2.4.0",
     "nanocomponent": "^6.5.2",
     "nanohtml": "^1.2.4",
+    "rc-menu": "^7.0.4",
+    "react-toolbox": "^2.0.0-beta.12",
     "tape": "^4.9.0"
   },
   "scripts": {

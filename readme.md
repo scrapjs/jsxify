@@ -14,10 +14,6 @@ const NanoButton = require('./nanobutton')
 const Scatter2D = require('@a-vis/scatter2d')
 const { Menu, MenuItem } = require('rc-menu')
 
-h.use(require('jsxify/react')(
-	require('react-dom'), require('react-hyperscript')
-))
-
 <document.body>
 <header>
 	<Menu>
@@ -33,26 +29,11 @@ h.use(require('jsxify/react')(
 </document.body>
 ```
 
-## Frameworks
-
-By default JSX handles plain strings, html and virtual-dom / widgets. To enable frameworks, include them as
-
-```jsx
-const h = require('jsxify')
-
-h.use(
-	require('jsxify/react'),
-	require('jsxify/preact'),
-	require('jsxify/angular'),
-	require('jsxify/mercury')
-)
-```
-
-Supported frameworks:
+### Supported frameworks
 
 <!-- * [hyperx](https://www.npmjs.com/package/hyperx) -->
-<!-- * [hyperscript](https://www.npmjs.com/package/hyperscript) -->
-<!-- * [virtual-dom](https://www.npmjs.com/package/virtual-dom) -->
+* [hyperscript](https://www.npmjs.com/package/hyperscript)
+* [virtual-dom](https://www.npmjs.com/package/virtual-dom)
 * [react](https://www.npmjs.com/package/react)
 * [preact](https://www.npmjs.com/package/preact)
 * [base-element](https://www.npmjs.com/package/base-element)
@@ -75,7 +56,7 @@ Instead of setting up frameworks it may be easier to enable `jsxify` transform w
   },
 ```
 
-That will detect included component classes and insert according `h.use` directives.
+That will detect included component classes and insert corresponding `h.use` directives.
 
 
 ## Motivation
