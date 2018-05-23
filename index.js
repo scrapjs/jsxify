@@ -23,10 +23,9 @@ module.exports = function jsxify (a, b) {
 	var instanceCache = {}
 
 	function jsx (name, props, children) {
-		var component = componentCache[name]
+		var component = detect(name)
 
 		if (!component) return h(name, props, children)
-
 
 		var update = component.render || component.update || component.rerender || component.refresh
 		var create = component.create || component.init || component.constructor
@@ -49,6 +48,14 @@ module.exports = function jsxify (a, b) {
 		return content
 	}
 
+	function detect (compo) {
+		if (typeof compo === 'string') {
+			component = componentCache[name]
+			if (!component) throw Error('Undefined component `' + component + '`. Use `jsxify.add()` to register components.')
+		}
+
+	}
+
 	function add (components) {
 		if (components.length) {
 			for (let i = 0; i < components.length; i++) {
@@ -59,12 +66,6 @@ module.exports = function jsxify (a, b) {
 		for (var name in components) {
 			var component = components[name]
 
-			if (isClass(component)) {
-				// Nanocomponent
-				if (component.prototype.__proto__.constructor.name) {
-					componentCache[name] = lib.nanocomponent
-				}
-			}
 		}
 	}
 
