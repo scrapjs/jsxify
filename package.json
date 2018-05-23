@@ -42,6 +42,7 @@
   "author": "Dmitry Yv <df.creative@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "browserify-optional": "^1.0.1",
     "hyperscript": "^2.0.2",
     "is-class": "0.0.4"
   }
