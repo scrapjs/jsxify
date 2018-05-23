@@ -46,18 +46,6 @@ const { Menu, MenuItem } = require('rc-menu')
 * [svelte](https://github.com/sveltejs/svelte)
 
 
-## Browserify transform
-
-Instead of setting up frameworks it may be easier to enable `jsxify` transform with options in `package.json` as
-
-```json
-  "browserify": {
-    "transform": "jsxify"
-  },
-```
-
-That will detect included component classes and insert corresponding `h.use` directives.
-
 
 ## Motivation
 
