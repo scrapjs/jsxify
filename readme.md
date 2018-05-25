@@ -13,27 +13,54 @@ const h = require('jsxify')
 const NanoButton = require('./nanobutton')
 const Scatter2D = require('@a-vis/scatter2d')
 const { Menu, MenuItem } = require('rc-menu')
+const ReactDOM = require('react-dom')
+const React = require('react')
+const Dropdown = require('vue-dropdown')
 
-<document.body>
-<header>
-	<Menu>
-		<MenuItem />
-		<MenuItem />
-		<MenuItem />
-	</Menu>
-</header>
-<main>
-	<Scatter2d />
-	<NanoButton ...props/>
-</main>
-</document.body>
+document.body.appendChild(
+	<header>
+		<Menu orient="horiz">
+			<MenuItem />
+			<MenuItem />
+			<MenuItem id="lang">
+				<Dropdown items={['fr', 'en']} />
+			</MenuItem>
+		</Menu>
+	</header>
+	<main>
+		<Scatter2d data={} />
+		<NanoButton ...props/>
+	</main>
+)
 ```
+
+## API
+
+### h = require('jsxify/dom')
+
+JSX → DOM.
+
+<!--
+### h = require('jsxify/vdom')
+
+JSX → virtual-dom.
+
+### h = require('jsxify/react')
+
+JSX → react element.
+
+### h = require('jsxify/preact')
+
+JSX → preact element.
+-->
 
 ### Supported frameworks
 
 <!-- * [hyperx](https://www.npmjs.com/package/hyperx) -->
+* [nanocomponent](https://www.npmjs.com/package/nanocomponent)
 * [hyperscript](https://www.npmjs.com/package/hyperscript)
 * [virtual-dom](https://www.npmjs.com/package/virtual-dom)
+* [vue](https://www.npmjs.com/package/vue)
 * [react](https://www.npmjs.com/package/react)
 * [preact](https://www.npmjs.com/package/preact)
 * [base-element](https://www.npmjs.com/package/base-element)
@@ -43,6 +70,7 @@ const { Menu, MenuItem } = require('rc-menu')
 * [virtual-dom](https://www.npmjs.com/package/virtual-dom)
 * [lit-element](https://github.com/Polymer/lit-element)
 * [fun-component](https://github.com/tornqvist/fun-component)
+* [marko-js](https://github.com/tornqvist/marko-js)
 * [svelte](https://github.com/sveltejs/svelte)
 
 

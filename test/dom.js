@@ -1,21 +1,27 @@
 'use strict'
 
 let t = require('tape')
-let h = require('../')(require('hyperscript'), require('./components'))
+let h = require('../dom')
+let morph = require('morphdom')
+let Nanobutton = require('./components/nanobutton')
 
-
-t('nanocomponent', t => {
+t('nanocomponent', function (t) {
 	function render (color) {
-		return <Nanobutton color={color}>
-			<em>Button</em>
-		</Nanobutton>
+		morph(document.body,
+			h('body', null, [
+				h(Nanobutton, {color:color}, [
+					h('em', null, 'Button')
+				])
+			])
+		)
 	}
 
-	document.body.appendChild(render('red'))
-	setTimeout(() => {
-		document.body.appendChild(render('green'))
-		setTimeout(() => {
-			document.body.appendChild(render('blue'))
+	render('red')
+	setTimeout(function () {
+		render('green')
+		setTimeout(function () {
+			render('blue')
 		}, 1000)
 	}, 1000)
 })
+

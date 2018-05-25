@@ -8,31 +8,23 @@
     "url": "git://github.com/dy/jsxify.git"
   },
   "devDependencies": {
-    "jsx-transform": "^2.4.0",
+    "morphdom": "^2.3.3",
     "nanocomponent": "^6.5.2",
     "nanohtml": "^1.2.4",
-    "rc-menu": "^7.0.4",
-    "react-toolbox": "^2.0.0-beta.12",
     "tape": "^4.9.0"
   },
   "scripts": {
-    "test": "buto test"
+    "test": "budo test"
   },
   "browserify": {
     "transform": [
-      [
-        "jsx-transform/browserify",
-        {
-          "factory": "h",
-          "passUnknownTagsToFactory": true,
-          "unknownTagsAsString": true
-        }
-      ]
+      "browserify-optional"
     ]
   },
   "keywords": [
     "jsx",
     "react",
+    "jsxify",
     "nanocomponent",
     "jsx-transform",
     "babel",
@@ -44,6 +36,6 @@
   "dependencies": {
     "browserify-optional": "^1.0.1",
     "hyperscript": "^2.0.2",
-    "is-class": "0.0.4"
+    "virtual-dom": "^2.1.1"
   }
 }

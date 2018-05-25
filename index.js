@@ -1,6 +1,5 @@
 'use strict'
 
-var isClass = require('is-class')
 var lib = require('./lib')
 
 
@@ -23,10 +22,22 @@ module.exports = function jsxify (a, b) {
 	var componentCache = {}
 	var instanceCache = {}
 
-	function jsx (name, props, children) {
-		var component = detect(name)
+	function h (name, props, children) {
+		// <document.body>
+		if (isElement(name)) {
+
+			morph(name, )
+			var rootNode = name
+
+			var tree = VNode('div', props, children)
+
+			var patches = diff(tree, newTree)
+			patch(rootNode, patches)
+		}
 
 		if (!component) return h(name, props, children)
+
+		var component = detect(name)
 
 		var update = component.render || component.update || component.rerender || component.refresh
 		var create = component.create || component.init || component.constructor
@@ -49,34 +60,6 @@ module.exports = function jsxify (a, b) {
 		return content
 	}
 
-	function detect (compo) {
-		// h('div'
-
-		// h(document.body
-
-		// h(VNode
-
-		// h(ReactEl
-
-		// h(PreactEl
-	}
-
-	function add (components) {
-		if (components.length) {
-			for (let i = 0; i < components.length; i++) {
-				add(com)
-			}
-		}
-
-		for (var name in components) {
-			var component = components[name]
-
-		}
-	}
-
-	add(components)
-
-	jsx.add = jsx.register = jsx.use = add
 
 	return jsx
 }

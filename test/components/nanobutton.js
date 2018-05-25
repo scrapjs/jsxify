@@ -1,26 +1,25 @@
-let html = require('nanohtml')
 let Nanocomponent = require('nanocomponent')
 
-class Button extends Nanocomponent {
-  constructor () {
-    super()
-    this.color = null
-  }
 
-  createElement ({color}) {
-    this.color = color
-    return html`
-      <button style="background-color: ${color}">
-        Click Me
-      </button>
-    `
-  }
-
-  // Implement conditional rendering
-  update (state) {
-    let newColor = state.color
-    return newColor !== this.color
-  }
+function Nanobutton () {
+  Nanocomponent.apply(this, arguments)
+  this.color = null
 }
 
-module.exports = Button
+Nanobutton.prototype = Object.create(Nanocomponent.prototype)
+
+Nanobutton.prototype.createElement = function (o) {
+  this.color = o.color
+  var b = document.createElement('button')
+  b.style.backgroundColor = this.color
+  b.innerHTML = 'ClickMe'
+  return b
+}
+
+// Implement conditional rendering
+Nanobutton.prototype.update = function (state) {
+  let newColor = state.color
+  return newColor !== this.color
+}
+
+module.exports = Nanobutton
