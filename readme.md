@@ -9,15 +9,20 @@ Enable JSX for everything.
 [![npm install jsxify](https://nodei.co/npm/jsxify.png?mini=true)](https://npmjs.org/package/jsxify/)
 
 ```jsx
+// require jsx
 const h = require('jsxify')
+require('jsxify-react')
+
+// require components
 const NanoButton = require('./nanobutton')
-const Scatter2D = require('@a-vis/scatter2d')
+const Scatter2D = require('regl-scatter2d')
 const { Menu, MenuItem } = require('rc-menu')
 const ReactDOM = require('react-dom')
 const React = require('react')
 const Dropdown = require('vue-dropdown')
 
-document.body.appendChild(
+// create app
+<document.body>
 	<header>
 		<Menu orient="horiz">
 			<MenuItem />
@@ -31,32 +36,61 @@ document.body.appendChild(
 		<Scatter2d data={} />
 		<NanoButton ...props/>
 	</main>
-)
+</document.body>
 ```
+
+To compile JSX, any of [jsx-transform](https://www.npmjs.com/package/jsx-transform) or [babel](https://babeljs.io/docs/plugins/transform-react-jsx/) can be used.
 
 ## API
 
-### h = require('jsxify/dom')
+### import h from 'jsxify'
 
-JSX → DOM.
+Return hyperscript-compatible function, converting JSX to DOM. To register framework converters, include `jsxify-*` specific packages.
+
+```jsx
+import h from 'jsxify'
+import 'jsxify-react'
+import 'jsxify-vdom'
+
+import ReactComponent from './react-component'
+import VWidget from './vdom-component'
+
+h(ReactComponent, props, [
+	h(VWidget)
+])
+```
+
+### h(target, props?, children?)
+
+Return element based on `target` argument, apply properties and append children. Element type is created according to the scheme:
+
+```jsx
+<document.body>					// returns HTMLElement
+	<div>						// creates HTMLElement by hyperscipt
+		<VDOMWidget>			// converts virtual-dom widget to HTMLElement
+			<div>				// creates VNode by virtual-dom/h
+				<ReactComp>		// converts React.Component to virtual-dom
+					<div></div>	// creates React.Element by React.createElement
+				</ReactComp>
+			</div>
+		</VDOMWidget>
+	</div>
+</document.body>
+```
+
+Created node type depends on the parent component framework, eg. nodes inside virtual-dom widget are `VNode`s, nodes inside of react component are `React.Element`s, etc. To force the result type, use `jsx-type` property:
+
+```jsx
+<div jsx-type='string'>Foo</div>	// creates HTML string
+<div jsx-type='dom'>Bar</div>		// creates DivElement
+<div jsx-type='vdom'>Baz</div>		// creates VNode
+```
+
+
+## Supported Frameworks
 
 <!--
-### h = require('jsxify/vdom')
-
-JSX → virtual-dom.
-
-### h = require('jsxify/react')
-
-JSX → react element.
-
-### h = require('jsxify/preact')
-
-JSX → preact element.
--->
-
-### Supported frameworks
-
-<!-- * [hyperx](https://www.npmjs.com/package/hyperx) -->
+* [hyperx](https://www.npmjs.com/package/hyperx)
 * [nanocomponent](https://www.npmjs.com/package/nanocomponent)
 * [hyperscript](https://www.npmjs.com/package/hyperscript)
 * [virtual-dom](https://www.npmjs.com/package/virtual-dom)
@@ -72,15 +106,17 @@ JSX → preact element.
 * [fun-component](https://github.com/tornqvist/fun-component)
 * [marko-js](https://github.com/tornqvist/marko-js)
 * [svelte](https://github.com/sveltejs/svelte)
-
+* [deku](https://www.npmjs.com/package/deku)
+* -->
 
 
 ## Motivation
 
-Creating a centralized component like `hyperdom`, `nanocomponent` and adapters for it seems tempting but not feasible task, since there is huge amount of miscellaneous framework-based components, especially for react.
+Creating a centralized component like `hyperdom`, `nanocomponent` and a bunch of framework adapters seems tempting but not feasible task, since there are many miscellaneous framework-based components, especially for react/preact/vdom/vanilla.
 
-Instead, enabling JSX adapters for frameworks removes incompatibilities and creates single unopinionated workflow. Or just enables react infrastructure for non-react crowd.
+Instead, creating set of framework converters removes incompatibilities and creates single unopinionated workflow. At least enables react infrastructure for non-react public.
 
+`jsxify` provides a JSX glue, making UI development easy, natural and framework agnostic.
 
 ## License
 

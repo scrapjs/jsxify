@@ -1,9 +1,55 @@
 'use strict'
 
-let t = require('tape')
-let h = require('../dom')
-let morph = require('morphdom')
-let Nanobutton = require('./components/nanobutton')
+var t = require('tape')
+var h = require('../dom')
+var morph = require('morphdom')
+var Nanobutton = require('./components/nanobutton')
+
+
+/**
+
+altogether
+
+<main>
+	<Menu>
+		<MenuItem/>
+		<MenuItem/>
+	</Menu>
+	<canvas id='plot'/>
+	<Scatter canvas='#plot'/>
+	<Cartesian canvas='#plot'/>
+	<Nanobutton />
+</main>
+
+ */
+
+
+/**
+
+deletion undefineds
+
+<Hello what="World"/>
+
+<Hello what="World"/>
+<Hello what="Universe"/>
+
+<Hello what="Universe"/>
+
+ */
+
+
+/**
+
+should identify both class and instance
+
+var Text = require('regl-text')
+var TextInst = Text()
+
+<Text data={} />
+<TextInst data={} />
+
+*/
+
 
 t('nanocomponent', function (t) {
 	function render (color) {

@@ -34,7 +34,9 @@
   "author": "Dmitry Yv <df.creative@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "array-lru": "^1.1.1",
     "browserify-optional": "^1.0.1",
+    "es6-weak-map": "^2.0.2",
     "hyperscript": "^2.0.2",
     "virtual-dom": "^2.1.1"
   }
