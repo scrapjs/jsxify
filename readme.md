@@ -9,20 +9,22 @@ Enable JSX for everything.
 [![npm install jsxify](https://nodei.co/npm/jsxify.png?mini=true)](https://npmjs.org/package/jsxify/)
 
 ```jsx
-// require jsx
-const h = require('jsxify')
-require('jsxify-react')
+const jsxify = require('jsxify')
+const h = jsxify(
+	require('jsxify-dom'),
+	require('jsxify-react'),
+	require('jsxify-nano'),
+	require('jsxify-gl'),
+	require('jsxify-vue')
+)
 
-// require components
 const NanoButton = require('./nanobutton')
 const Scatter2D = require('regl-scatter2d')
 const { Menu, MenuItem } = require('rc-menu')
-const ReactDOM = require('react-dom')
-const React = require('react')
 const Dropdown = require('vue-dropdown')
 
-// create app
-<document.body>
+document.body.appendChild(
+<div>
 	<header>
 		<Menu orient="horiz">
 			<MenuItem />
@@ -36,24 +38,27 @@ const Dropdown = require('vue-dropdown')
 		<Scatter2d data={} />
 		<NanoButton ...props/>
 	</main>
-</document.body>
+</div>
+)
 ```
 
 To compile JSX, any of [jsx-transform](https://www.npmjs.com/package/jsx-transform) or [babel](https://babeljs.io/docs/plugins/transform-react-jsx/) can be used.
 
 ## API
 
-### import h from 'jsxify'
+### var h = jsxify(to, from, ...rest)
 
-Return hyperscript-compatible function, converting JSX to DOM. To register framework converters, include `jsxify-*` specific packages.
+Create hyperscript function for the target framework `to`, able to convert from frameworks `from` and the `rest`. Frameworks are enabled by `jsxify-*` packages.
 
 ```jsx
-import h from 'jsxify'
-import 'jsxify-react'
-import 'jsxify-vdom'
+import jsx from 'jsxify'
+import react from 'jsxify-react'
+import vdom from 'jsxify-vdom'
 
 import ReactComponent from './react-component'
 import VWidget from './vdom-component'
+
+let h = jsx(react, vdom)
 
 h(ReactComponent, props, [
 	h(VWidget)
@@ -62,64 +67,61 @@ h(ReactComponent, props, [
 
 ### h(target, props?, children?)
 
-Return element based on `target` argument, apply properties and append children. Element type is created according to the scheme:
+Hyperscript function returning instance of the component for the target framework.
+
+Example:
 
 ```jsx
-<document.body>					// returns HTMLElement
-	<div>						// creates HTMLElement by hyperscipt
-		<VDOMWidget>			// converts virtual-dom widget to HTMLElement
-			<div>				// creates VNode by virtual-dom/h
-				<ReactComp>		// converts React.Component to virtual-dom
-					<div></div>	// creates React.Element by React.createElement
-				</ReactComp>
-			</div>
-		</VDOMWidget>
-	</div>
-</document.body>
+var el = (
+<div>						// creates HTMLElement by hyperscipt
+	<VDOMWidget>			// converts virtual-dom widget to HTMLElement
+		<div>				// creates VNode by virtual-dom/h
+			<ReactComp>		// converts React.Component to virtual-dom
+				<div></div>	// creates React.Element by React.createElement
+			</ReactComp>
+		</div>
+	</VDOMWidget>
+</div>
+)
 ```
 
-Created node type depends on the parent component framework, eg. nodes inside virtual-dom widget are `VNode`s, nodes inside of react component are `React.Element`s, etc. To force the result type, use `jsx-type` property:
-
-```jsx
-<div jsx-type='string'>Foo</div>	// creates HTML string
-<div jsx-type='dom'>Bar</div>		// creates DivElement
-<div jsx-type='vdom'>Baz</div>		// creates VNode
-```
-
-`props` object normalizes `on-`, `data-` and `jsx-` properties to `on: {}`, `data: {}`, `jsx: {}` objects.
-
+The function normalizes `key`/`id` properties, which are considered equivalent.
+Also it normalizes `on-` and `data-` properties to `on={{}}`, `data{{}}` objects.
 
 ## Supported Frameworks
 
-<!--
-* [hyperx](https://www.npmjs.com/package/hyperx)
-* [nanocomponent](https://www.npmjs.com/package/nanocomponent)
+* [vhtml](https://www.npmjs.com/package/vhtml)
 * [hyperscript](https://www.npmjs.com/package/hyperscript)
 * [virtual-dom](https://www.npmjs.com/package/virtual-dom)
 * [vue](https://www.npmjs.com/package/vue)
 * [react](https://www.npmjs.com/package/react)
 * [preact](https://www.npmjs.com/package/preact)
-* [base-element](https://www.npmjs.com/package/base-element)
-* [ember](https://www.npmjs.com/package/ember)
-* [mercury](https://www.npmjs.com/package/mercury)
-* [webcomponent](https://www.npmjs.com/package/webcomponent)
 * [virtual-dom](https://www.npmjs.com/package/virtual-dom)
-* [lit-element](https://github.com/Polymer/lit-element)
-* [fun-component](https://github.com/tornqvist/fun-component)
 * [marko-js](https://github.com/tornqvist/marko-js)
 * [svelte](https://github.com/sveltejs/svelte)
 * [deku](https://www.npmjs.com/package/deku)
 * [etch](https://github.com/atom/etch)
-* -->
+* [nanocomponent](https://www.npmjs.com/package/nanocomponent)
+* [gl-component](https://www.npmjs.com/package/gl-component)
+* [lit-element](https://github.com/Polymer/lit-element)
+* [fun-component](https://github.com/tornqvist/fun-component)
+* [base-element](https://www.npmjs.com/package/base-element)
+* [ember](https://www.npmjs.com/package/ember)
+* [mercury](https://www.npmjs.com/package/mercury)
+* [webcomponent](https://www.npmjs.com/package/webcomponent)
 
 
 ## Motivation
 
-Creating a centralized component like `hyperdom`, `nanocomponent` and a bunch of framework adapters seems tempting but not feasible task, since there are many miscellaneous framework-based components, especially for react/preact/vdom/vanilla.
+Creating a centralized component like `hyperdom`, `nanocomponent` or `etch` and a set of adapters seems tempting but not feasible task, since there are many miscellaneous framework-specific components, especially for react/preact/vdom/etch.
 
 Instead, creating set of framework converters removes incompatibilities and creates single unopinionated workflow. At least enables react infrastructure for non-react public.
 
 `jsxify` provides a JSX glue, making UI development easy, natural and framework agnostic.
+
+## Related
+
+* [hyperx](https://www.npmjs.com/package/hyperx) − template strings for hyperscript frameworks.
 
 ## License
 

@@ -13,7 +13,7 @@
 - no way for portals
 - no way for partial updates
 
-### 3. <App container={target}> ... </App> ★
+### 3. <App container={target}> ... </App>
 
 + natural, intuitive, convenient
 + can be enabled for all components
@@ -47,6 +47,7 @@
 + no mixup of vdom and html
 - opinionated way to mount items
 - no natural fragment support
+
 
 ### 4. <document.body></document.body>
 
@@ -137,6 +138,9 @@ here portal <RealNode/> gets inserted into <Compo>
 		- difficult to close
 
 - too custom solution: too many questions, too opinionated syntactic extension/practice over JSX
+- not a single JSX library supports such arguments, that is rather a hack
+- conceptually there is contradiction: Uppercase classes/components create elements/instances
+- occupying element as a tag, we still leave room for property eg. `jsx-mount`: we always can validly pass mount as a property.
 
 
 ### 5. Return html/vdom
@@ -188,6 +192,13 @@ morph(target, <App><Content/></App>)
 
 - That is already invented, see dom-chef, vhtml etc.
 
++ The most strict solution: default result is dom, unless custom renderer included first, eg.
+```jsx
+import h from 'jsxify-react'
+import 'jsxify-vdom'
+
+// h always returns react elements
+```
 
 ### 6. let h = jsxify(require('hyperscript'))
 
@@ -203,9 +214,10 @@ let h = require('jsxify')(require('hyperscript'),
 * uses internally vdom and a bunch of explicit detectors
 - does not allow easy import h from 'jsxify'
 - requires custom dependency to remember `require('hyperscript')`
++ hyperx-like
 
 
-### 7. = 3 + 4 ★
+### 7. = 3 + 4
 
 + Depending on the type of target node - HTML, VDOM, React or etc., it handles that properly anyways
 ```jsx
@@ -268,3 +280,83 @@ var Body = document.body
 				- redundant html entity
 
 + enables non-opinionated mount={}, which can be component-specific
+- 4 is too opinionated solution and custom syntax. Ideally jsxify needs to be as strict as possible.
+
+
+### 8. h = require('jsxify')(require('hyperscript'), ...)
+
++ Fully explicit conventional constructor
+```jsx
+let h = require('jsxify')({
+	default: 'dom',
+
+	text: require('vhtml'),
+	dom: require('hyperscript'),
+
+	vdom: require('jsxify-vdom'),
+	preact: require('jsxify-preact'),
+	react: require('jsxify-react'),
+	etch: require('jsxify-etch')
+})
+- Initializing jsxify customly for every module
+	+ Same with hyperX
++ No questions of what's happening inside
++ Solves default renderer issue
++ Memorizable API
++ Separates frameworks from converters
+- No need to explicitly pass frameworks, they can be required inside of converters
+	+ That does not allow to use jsxify without transform
+- No need to explicitly pass converters, they can be figured out from frameworks
+	+ That does not allow to use jsxify without transform
+- No way to use import h from 'jsxify'
+	+ Use `import jsxify from 'jsxify'`, `let h = jsxify(convA, convB, ...)`
+		+ First converter is the default result: ★
+		```jsx
+		import jsxify from 'jsxify'
+		import react from 'jsxify-react'
+		import dom from 'jsxify-dom'
+
+		const h = jsxify(react, dom)
+		```
+			+ Nice understandable setup: dom and the rest coerces to react
+			? Is that possible to just `import h from 'jsxify-react'` and the rest sets ups default output?
+			```jsx
+			import h from 'jsxify-react'
+			import 'jsxify-dom'
+			import 'jsxify-vdom'
+			```
+				- implicit setup (shady, distrustful)
+				- every converter implements jsxify function
+				- every module sets up jsx in its own fashion GLOBALLY eg.
+				```jsx
+				// A.js
+				import h from 'jsxify-react'
+				import 'jsxify-dom'
+
+				// B.js
+				import h from 'jsxify-react'
+				import 'jsxify-vdom'
+				```
+				↑ not clear what setup jsxify has globally.
+
+## Notes
+
+* jsxify is not a collection of inter-convertible frameworks, that is rather glue converting to DOM and providing widgets-like mechanism
+	* react → vdom only as vdom widget, rendering dom
+	* vdom → react only as component with ref, rendering dom
+	* anything → vdom as widget, rendering dom
+	* dom → vdom as widget, - returning dom
+	* hence, jsxify should provide ways for frameworks to return and render DOM, not converting to other frameworks.
+	* Looking at etch convention: component should return .element property and .update method. If we could adapt framewords to that convention - that would be enough.
+
+* I want sattvic feeling of my soul being satisfied with jsxify before moving forward.
+
+## Conclusion
+
+* jsx should:
+	* create any-framework component within a single JSX
+		? what type of result should it be?
+			* we anyways include framework-specific packages eg, etch, react.
+		? should it convert any framework to any other framework widget?
+		? should it create DOM for no-framework hyperscript?
+	* normalize events, data, key APIs
