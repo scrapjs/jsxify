@@ -286,6 +286,7 @@ var Body = document.body
 ### 8. h = require('jsxify')(require('hyperscript'), ...)
 
 + Fully explicit conventional constructor
+
 ```jsx
 let h = require('jsxify')({
 	default: 'dom',
@@ -298,6 +299,8 @@ let h = require('jsxify')({
 	react: require('jsxify-react'),
 	etch: require('jsxify-etch')
 })
+```
+
 - Initializing jsxify customly for every module
 	+ Same with hyperX
 + No questions of what's happening inside
@@ -311,33 +314,69 @@ let h = require('jsxify')({
 - No way to use import h from 'jsxify'
 	+ Use `import jsxify from 'jsxify'`, `let h = jsxify(convA, convB, ...)`
 		+ First converter is the default result: ★
-		```jsx
+
+		```js
 		import jsxify from 'jsxify'
 		import react from 'jsxify-react'
 		import dom from 'jsxify-dom'
-
 		const h = jsxify(react, dom)
 		```
-			+ Nice understandable setup: dom and the rest coerces to react
-			? Is that possible to just `import h from 'jsxify-react'` and the rest sets ups default output?
-			```jsx
+		+ Nice understandable setup: dom and the rest coerces to react
+		? Is that possible to just `import h from 'jsxify-react'` and the rest sets ups default output?
+
+		```js
+		import h from 'jsxify-react'
+		import 'jsxify-dom'
+		import 'jsxify-vdom'
+		```
+			- implicit setup (shady, distrustful)
+			- every converter implements jsxify function
+			- every module sets up js in its own fashion GLOBALLY eg.
+
+			```js
+			// A.js
 			import h from 'jsxify-react'
 			import 'jsxify-dom'
+
+			// B.js
+			import h from 'jsxify-react'
 			import 'jsxify-vdom'
 			```
-				- implicit setup (shady, distrustful)
-				- every converter implements jsxify function
-				- every module sets up jsx in its own fashion GLOBALLY eg.
-				```jsx
-				// A.js
-				import h from 'jsxify-react'
-				import 'jsxify-dom'
+			↑ not clear what setup jsxify has globally.
+		? Should we init react converter or just directly pass?
+		```js
+		import jsxify from 'jsxify'
+		import jsxifyReact from 'jsxify-react'
+		import jsxifyVdom from 'jsxify-vdom'
+		import react from 'react'
 
-				// B.js
-				import h from 'jsxify-react'
-				import 'jsxify-vdom'
-				```
-				↑ not clear what setup jsxify has globally.
+		let h = jsxify(
+			jsxifyReact(react),
+			jsxifyVdom(vdom)
+		)
+		```
+			- thinking up options for every converter
+			- requiring react is possible within the container anyways
+				+ that can require different version though and does not allow for different setup
+					- multireact setup is likely a mistake
+			- does not allow for shorter init, makes code longer
+			- no need for user to type not used directly deps
+
+			```js
+			// es6
+			import jsxify from 'jsxify'
+			import react from 'jsxify-react'
+			import vdom from 'jsxify-vdom'
+			let h = jsxify(react, vdom)
+
+			// es5
+			let h = require('jsxify')(
+				require('jsxify-react'),
+				require('jsx-vdom')
+			)
+			```
+			+ standard transforms practice
+			~ some of deps may still require init
 
 ## Notes
 
@@ -357,6 +396,9 @@ let h = require('jsxify')({
 	* create any-framework component within a single JSX
 		? what type of result should it be?
 			* we anyways include framework-specific packages eg, etch, react.
+			+ result depends on jsxify constructor.
 		? should it convert any framework to any other framework widget?
+			+ that is possible, but conversion is DOM-centered.
 		? should it create DOM for no-framework hyperscript?
+			+ should provide any hyperscript function in constructor
 	* normalize events, data, key APIs

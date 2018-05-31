@@ -51,18 +51,21 @@ To compile JSX, any of [jsx-transform](https://www.npmjs.com/package/jsx-transfo
 Create hyperscript function for the target framework `to`, able to convert from frameworks `from` and the `rest`. Frameworks are enabled by `jsxify-*` packages.
 
 ```jsx
-import jsx from 'jsxify'
+import jsxify from 'jsxify'
 import react from 'jsxify-react'
 import vdom from 'jsxify-vdom'
+import reactDOM from 'react-dom'
 
 import ReactComponent from './react-component'
 import VWidget from './vdom-component'
 
-let h = jsx(react, vdom)
+let h = jsxify(react, vdom)
 
-h(ReactComponent, props, [
-	h(VWidget)
-])
+reactDOM.render(
+	h(ReactComponent, props, [
+		h(VWidget)
+	]),
+document.body)
 ```
 
 ### h(target, props?, children?)
