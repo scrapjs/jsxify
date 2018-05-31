@@ -86,6 +86,8 @@ Created node type depends on the parent component framework, eg. nodes inside vi
 <div jsx-type='vdom'>Baz</div>		// creates VNode
 ```
 
+`props` object normalizes `on-`, `data-` and `jsx-` properties to `on: {}`, `data: {}`, `jsx: {}` objects.
+
 
 ## Supported Frameworks
 
@@ -107,6 +109,7 @@ Created node type depends on the parent component framework, eg. nodes inside vi
 * [marko-js](https://github.com/tornqvist/marko-js)
 * [svelte](https://github.com/sveltejs/svelte)
 * [deku](https://www.npmjs.com/package/deku)
+* [etch](https://github.com/atom/etch)
 * -->
 
 
