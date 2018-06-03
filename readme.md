@@ -2,7 +2,7 @@
 
 **Work in progress**
 
-Enable JSX for everything.
+Unopinionated JSX with instant deploy.
 
 ## Usage
 
@@ -11,57 +11,47 @@ Enable JSX for everything.
 ```jsx
 const jsxify = require('jsxify')
 const h = jsxify(
-	require('jsxify-dom'),
+	require('jsxify-vdom'),
 	require('jsxify-react'),
 	require('jsxify-nano'),
-	require('jsxify-gl'),
+	require('jsxify-webgl'),
 	require('jsxify-vue')
 )
 
-const NanoButton = require('./nanobutton')
-const Scatter2D = require('regl-scatter2d')
-const { Menu, MenuItem } = require('rc-menu')
-const Dropdown = require('vue-dropdown')
-
-document.body.appendChild(
-<div>
-	<header>
-		<Menu orient="horiz">
-			<MenuItem />
-			<MenuItem />
-			<MenuItem id="lang">
-				<Dropdown items={['fr', 'en']} />
-			</MenuItem>
-		</Menu>
-	</header>
-	<main>
-		<Scatter2d data={} />
-		<NanoButton ...props/>
-	</main>
+// gets instantly deployed into container
+<div container={document.body}>
+	<AudioSource ondata={d => render({push: d})}/>
+	<FpsIndicator text="false"/>
+	<Logo href={package.repository.url}/>
+	<Panel closed onchange={render}>
+		<Volume id="width" min=0 max=100 value={state.width} />
+		<Range id="amplitude" symmetric min=-10 max=10 value={[-state.amplitude, state.amplitude]} />
+	</Panel>
+	<canvas context="webgl">
+		<Waveform data={state.data}/>
+	</canvas>
 </div>
-)
 ```
 
 To compile JSX, any of [jsx-transform](https://www.npmjs.com/package/jsx-transform) or [babel](https://babeljs.io/docs/plugins/transform-react-jsx/) can be used.
 
 ## API
 
-### var h = jsxify(to, from, ...rest)
+### var h = jsxify(container?, adapter1, adapter2, ...rest)
 
-Create hyperscript function for the target framework `to`, able to convert from frameworks `from` and the `rest`. Frameworks are enabled by `jsxify-*` packages.
+Create hyperscript function for the target `container`, enabling framework adapters by `jsxify-*` packages.
 
 ```jsx
-import jsxify from 'jsxify'
+import {jsxify, render} from 'jsxify'
 import react from 'jsxify-react'
 import vdom from 'jsxify-vdom'
-import reactDOM from 'react-dom'
 
 import ReactComponent from './react-component'
 import VWidget from './vdom-component'
 
 let h = jsxify(react, vdom)
 
-reactDOM.render(
+render(
 	h(ReactComponent, props, [
 		h(VWidget)
 	]),
@@ -70,57 +60,26 @@ document.body)
 
 ### h(target, props?, children?)
 
-Hyperscript function returning instance of the component for the target framework.
+Deploy JSX.
 
 Example:
 
 ```jsx
-var el = (
-<div>						// creates HTMLElement by hyperscipt
-	<VDOMWidget>			// converts virtual-dom widget to HTMLElement
-		<div>				// creates VNode by virtual-dom/h
-			<ReactComp>		// converts React.Component to virtual-dom
-				<div></div>	// creates React.Element by React.createElement
+<div container={document.body}>	// creates HTMLElement by hyperscipt
+	<VDOMWidget>				// converts virtual-dom widget to HTMLElement
+		<div>					// creates VNode by virtual-dom/h
+			<ReactComp>			// converts React.Component to virtual-dom
+				<div></div>		// creates React.Element by React.createElement
 			</ReactComp>
 		</div>
 	</VDOMWidget>
 </div>
-)
 ```
 
 The function normalizes `key`/`id` properties, which are considered equivalent.
 Also it normalizes `on-` and `data-` properties to `on={{}}`, `data{{}}` objects.
 
-## Supported Frameworks
-
-* [vhtml](https://www.npmjs.com/package/vhtml)
-* [hyperscript](https://www.npmjs.com/package/hyperscript)
-* [virtual-dom](https://www.npmjs.com/package/virtual-dom)
-* [vue](https://www.npmjs.com/package/vue)
-* [react](https://www.npmjs.com/package/react)
-* [preact](https://www.npmjs.com/package/preact)
-* [virtual-dom](https://www.npmjs.com/package/virtual-dom)
-* [marko-js](https://github.com/tornqvist/marko-js)
-* [svelte](https://github.com/sveltejs/svelte)
-* [deku](https://www.npmjs.com/package/deku)
-* [etch](https://github.com/atom/etch)
-* [nanocomponent](https://www.npmjs.com/package/nanocomponent)
-* [gl-component](https://www.npmjs.com/package/gl-component)
-* [lit-element](https://github.com/Polymer/lit-element)
-* [fun-component](https://github.com/tornqvist/fun-component)
-* [base-element](https://www.npmjs.com/package/base-element)
-* [ember](https://www.npmjs.com/package/ember)
-* [mercury](https://www.npmjs.com/package/mercury)
-* [webcomponent](https://www.npmjs.com/package/webcomponent)
-
-
-## Motivation
-
-Creating a centralized component like `hyperdom`, `nanocomponent` or `etch` and a set of adapters seems tempting but not feasible task, since there are many miscellaneous framework-specific components, especially for react/preact/vdom/etch.
-
-Instead, creating set of framework converters removes incompatibilities and creates single unopinionated workflow. At least enables react infrastructure for non-react public.
-
-`jsxify` provides a JSX glue, making UI development easy, natural and framework agnostic.
+### Framework adapters
 
 ## Related
 
