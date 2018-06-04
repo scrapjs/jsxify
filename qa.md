@@ -378,6 +378,41 @@ let h = require('jsxify')({
 			+ standard transforms practice
 			~ some of deps may still require init
 
+### Register plugins
+
+#### .use(...plugins) ★ - the least messy way, allows to extend h at any moment
+
++ easy
++ directly provides `h`
+- no ES6 import convenience
+	+ plugins requiring init need to be called anyways
++ allows for natural `import {h, render} from 'jsxify'`
+
+#### plugin(h)
+
++ jquery-like
+- no ES6 import convenience
+- messy multiple calls of required plugins
+	+ possibly plugins still have to be initialized
+		- does not make it easier, since we ought to pass h variable too
+
+#### jsxify(...plugins)
+
++ browserify, hyperx-like
++ allows for obvious target framework node mnemonic jsxify(to, from, from)
+	- not supposed to be implemented
+	- not only framework adapters are registered but rather plugins
+- not as natural as `h = require('jsxify')`
+
+#### import 'plugin'
+
+- implicit
+- includes own jsxify
++ allows for ES6 modules
+	- ES6 modules are resistant to run them
+- does not allow for plugin init still
+
+
 ## Notes
 
 * jsxify is not a collection of inter-convertible frameworks, that is rather glue converting to DOM and providing widgets-like mechanism
@@ -389,6 +424,8 @@ let h = require('jsxify')({
 	* Looking at etch convention: component should return .element property and .update method. If we could adapt framewords to that convention - that would be enough.
 
 * I want sattvic feeling of my soul being satisfied with jsxify before moving forward.
+
+
 
 ## Conclusion
 

@@ -136,6 +136,9 @@ Example:
 Sometimes you may want to organize [simulacra](https://en.wikipedia.org/wiki/Simulacra_and_Simulation) components, for example, include webgl shader programs as webgl context nodes. That can be easily achieved by
 
 ```jsx
+var h = require('jsxify')
+require('jsxify-gl')(h)
+
 var Text = require('gl-text')
 var Scatter = require('gl-scatter2d')
 var Lines = require('gl-line2d')
@@ -154,7 +157,7 @@ class WebGL {
 }
 
 <WebGL container={document.body}>
-	<Text text="Hello World!"/>
+	<Text text="Hello World!" />
 	<Scatter />
 	<Lines />
 </WebGL>
@@ -200,14 +203,16 @@ Framework plugins:
 
 Util plugins:
 
-* jsxify-frame − enable frame
+* jsxify-frame − schedule rendering for the next frame.
+* jsxify-canvas − extend canvas element to include programs as nested simulacra nodes.
+* jsxify-lifecycle − enable `mount` and `unmount` element lifecycle events.
 
 ### Difference with etch
 
 Jsxify | Etch
 ---|---
 Requires single `render` method, and optionally `update` | Requires `render` and `update` methods
-Rerenders whenever JSX evaluated. Frame scheduling can be implemented component-wise. | Plans rerender for the next frame.
+Rerenders whenever JSX evaluated. Frame scheduling can be implemented component-wise or via [jsxify-frame](https://github.com/jsxify/jsxify-frame) plugin. | Plans rerender for the next frame.
 Can include etch with [jsxify-etch]() | Cannot include jsxify
 
 ### Motivation?

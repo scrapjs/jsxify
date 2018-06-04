@@ -9,12 +9,12 @@ Unopinionated JSX with instant deploy.
 [![npm install jsxify](https://nodei.co/npm/jsxify.png?mini=true)](https://npmjs.org/package/jsxify/)
 
 ```jsx
-const jsxify = require('jsxify')
-const h = jsxify(
-	require('jsxify-vdom'),
-	require('jsxify-react'),
-	require('jsxify-nano'),
-	require('jsxify-webgl'),
+const h = require('jsxify')
+h.use(
+	require('jsxify-vdom')
+	require('jsxify-react')
+	require('jsxify-nano')
+	require('jsxify-webgl')
 	require('jsxify-vue')
 )
 
@@ -42,14 +42,14 @@ To compile JSX, any of [jsx-transform](https://www.npmjs.com/package/jsx-transfo
 Create hyperscript function for the target `container`, enabling framework adapters by `jsxify-*` packages.
 
 ```jsx
-import {jsxify, render} from 'jsxify'
-import react from 'jsxify-react'
-import vdom from 'jsxify-vdom'
+import {h, render} from 'jsxify'
+import jsxReact from 'jsxify-react'
+import jsxVdom from 'jsxify-vdom'
+
+h.use(jsxReact, jsxVdom)
 
 import ReactComponent from './react-component'
 import VWidget from './vdom-component'
-
-let h = jsxify(react, vdom)
 
 render(
 	h(ReactComponent, props, [
@@ -86,9 +86,11 @@ Jsxify by default accepts following targets as components:
 
 * JSX/HTML
 * function, returning JSX/HTML
-* class with `update`, `render` and `destroy` methods
+* object/class with `render(props, children)` method
+* object/class with `update(props, children)`, `render()` methods
+* object/class with `update`, `render`, `destroy` methods
 * any object with `.element` property
-* any framework-specific component, enabled by framework adapters
+* any custom component, enabled by plugins
 
 ### Framework adapters
 
