@@ -140,11 +140,17 @@ var Text = require('gl-text')
 var Scatter = require('gl-scatter2d')
 var Lines = require('gl-line2d')
 
-function WebGL (props, children) {
-	var canvas = document.createElement('canvas')
-	canvas.getContext('webgl') || canvas.getContext('experimental-webgl')
+class WebGL {
+  constructor (props) {
+  	this.canvas = document.createElement('canvas')
+  	this.context = canvas.getContext('webgl') || canvas.getContext('experimental-webgl')
+  }
 
-	return canvas
+  render (props, children) {
+    children.forEach(child => {
+      child.render()
+    })
+  }
 }
 
 <WebGL container={document.body}>
@@ -166,7 +172,11 @@ function WebGL (props, children) {
 
 ### Normalized properties?
 
-### Supported Frameworks?
+### Plugins?
+
+Plugins enable property/component-based hooks extending jsxify functionality.
+
+Framework plugins:
 
 * [vhtml](https://www.npmjs.com/package/vhtml)
 * [hyperscript](https://www.npmjs.com/package/hyperscript)
@@ -187,6 +197,18 @@ function WebGL (props, children) {
 * [ember](https://www.npmjs.com/package/ember)
 * [mercury](https://www.npmjs.com/package/mercury)
 * [webcomponent](https://www.npmjs.com/package/webcomponent)
+
+Util plugins:
+
+* jsxify-frame − enable frame
+
+### Difference with etch
+
+Jsxify | Etch
+---|---
+Requires single `render` method, and optionally `update` | Requires `render` and `update` methods
+Rerenders whenever JSX evaluated. Frame scheduling can be implemented component-wise. | Plans rerender for the next frame.
+Can include etch with [jsxify-etch]() | Cannot include jsxify
 
 ### Motivation?
 

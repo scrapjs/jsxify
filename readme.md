@@ -79,11 +79,23 @@ Example:
 The function normalizes `key`/`id` properties, which are considered equivalent.
 Also it normalizes `on-` and `data-` properties to `on={{}}`, `data{{}}` objects.
 
+
+## Components
+
+Jsxify by default accepts following targets as components:
+
+* JSX/HTML
+* function, returning JSX/HTML
+* class with `update`, `render` and `destroy` methods
+* any object with `.element` property
+* any framework-specific component, enabled by framework adapters
+
 ### Framework adapters
 
 ## Related
 
 * [hyperx](https://www.npmjs.com/package/hyperx) − template strings for hyperscript frameworks.
+* [etch](https://www.npmjs.com/package/etch) −
 
 ## License
 
