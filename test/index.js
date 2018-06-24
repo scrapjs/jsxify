@@ -1,109 +1,50 @@
 'use strict'
 
 var t = require('tape')
-
-var h = require('../')
-// var NanoCompo = require('./component/nano')
-// var ReactCompo = require('./component/react')
-// var PreactCompo = require('./component/preact')
-// var GlCompo = require('./component/gl')
-// var CustomCompo = require('./component/custom')
+var {h, render} = require('../')
 
 
-var div = document.createElement('div')
-var em = document.createElement('em')
+t('create/update/render methods', t => {
+	class X {
+		constructor(prop, children) {
+			console.log('create', prop.a)
+		}
 
-var fragment = [
-	// null,
-	// 'Hello Text',
-	// function () {
-	// 	return 'Hello Function'
-	// },
-	// ['Hello', ' ', 'List'],
-	// document.createElement('div'),
+		update(prop) {
+			this.text = prop.a
+			console.log('update', this.text)
+		}
 
-	// h(null),
+		render() {
+			console.log('render', this.text)
 
-	// h(div, {class: 'dom'}, [
-	// 	h(em, null, 'Hello DOM')
-	// ]),
+			// return this.node
+			return document.createTextNode(this.text)
+		}
 
-	h('div', {class: 'hyper'}, [
-		h('em', null, 'Hello Hyperscript')
-	]),
+		destroy() {
+			console.log('destroy', this.text)
+		}
+	}
 
-	// h(function () {
-	// 	return 'Hello Function Component'
-	// }),
-	// h({
-	// 	render: function () {
-	// 		return 'Hello Object Component'
-	// 	}
-	// }),
+	// <X a=1 b=2/>
+	console.log('---')
+	let x = h(X, {a:1})
 
-	// h(VDomWidget),
-	// h(VDomThunk),
+	// this should create new X
+	render(x, document.body)
 
-	// h(Nanobutton, {color: 'red'}, [
-	// 	h('em', null, 'Hello Nanocomponent')
-	// ]),
-	// h(ReactElement),
-	// h(ReactCompo),
-	// h(PreactCompo),
-	// h(CustomCompo),
-	// h(GlCompo),
-	// h(MercuryCompo),
-	// h(MarcoCompo),
-	// h(hyperx)
+	console.log('---')
+	let y = h(X, {a: 3})
 
-	// dom( vdom( dom() ) )
-	// vdom( dom( vdom() ))
-	// dom( react( vdom() ) )
-	// vdom( preact ( nanocomponent( h() ) ))
-]
+	// this should create new X and update prev x
+	render([x, y], document.body)
 
-var result = '<div class="el">' +
-	'Hello World' +
-	'<em></em>' +
-	'123' +
-	'<button class="nanobutton" style="color: red"><em>Click</em></button>' +
-	'<reactCompo/>' +
-	'preactCompo' +
-	'customCompo' +
-	'glCompo' +
-'</div>'
+	console.log('---')
+	let z = h(X, {a: 2})
 
-
-t.only('dom', function (t) {
-	var el = document.createElement('div')
-
-	h(document.body, {class: 'el'}, fragment)
-
-	// t.equal(
-	// 	h('div', {class: 'el'}, fragment).outerHTML,
-	// 	result
-	// })
-
-	// t.equal(
-	// 	h(div, {class: 'el'}, fragment).outerHTML,
-	// 	result
-	// )
-	t.end()
-})
-
-
-t.skip('vdom', function (t) {
-	var el = document.createElement('div')
-
-	t.equal(
-		vdom2html(h('div', {class: 'el'}, fragment)),
-		result
-	)
-
-	t.equal(
-		h(div, {class: 'el'}, fragment).outerHTML,
-		result
-	)
+	// this should destroy prev y and update x
+	render(z, document.body)
 
 	t.end()
 })

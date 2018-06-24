@@ -12,7 +12,7 @@ TODO: elaborate
 
 ### Portals?
 
-Any JSX node in jsxify can provide `container` property to be deployed into any target.
+Any JSX node in jsxify can provide a `container` property defining a target node to mount the JSX into.
 
 Consider React example:
 
@@ -71,7 +71,7 @@ class App extends React.Component {
 ReactDOM.render(<App />, appRoot);
 ```
 
-Analogous jsxify code will be:
+Analogous jsxify is:
 
 ```js
 function Modal (props, children) {
@@ -107,7 +107,7 @@ class App {
 
 Jsxify does not use diffing/patching approach, istead, it delegates JSX structure of components to update DOM themselves, and makes sure these components exist in DOM nodes according to that structure.
 
-Jsxify does not force content of `container` be exactly as in JSX, allowing to mixin real DOM, rather than dictate/redefine it.
+Jsxify does not force content of `container` be exactly as in JSX, allowing to mixin real DOM, rather than force it.
 
 Example:
 
@@ -171,7 +171,17 @@ class WebGL {
 
 ### Rendering to a target other than `document.body`?
 
-### Framework replacement?
+### Framework replacement
+
+`jsxify` can be used instead of react/preact as:
+
+```js
+import {h, render} from 'jsxify'
+import jsxifyReact from 'jsxify-react'
+h.use(jsxifyReact)
+
+// use h and render the same way you would use reactDOM.render and react.createElement
+```
 
 ### Normalized properties?
 

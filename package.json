@@ -32,11 +32,9 @@
   "author": "Dmitry Yv <df.creative@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "array-lru": "^1.1.1",
-    "browserify-optional": "^1.0.1",
-    "camelcase": "^5.0.0",
+    "es6-map": "^0.1.5",
     "es6-weak-map": "^2.0.2",
     "hyperscript": "^2.0.2",
-    "virtual-dom": "^2.1.1"
+    "primitive-pool": "^1.0.0"
   }
 }

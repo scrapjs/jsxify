@@ -7,7 +7,7 @@ var convert = require('./lib/convert')
 var jsxify = require('./')
 
 var hyperscript = require('hyperscript')
-var extend = Object.assign//require('object-assign')
+var extend = require('object-assign')
 
 module.exports = dom
 

@@ -37,7 +37,7 @@ To compile JSX, any of [jsx-transform](https://www.npmjs.com/package/jsx-transfo
 
 ## API
 
-### var h = jsxify(container?, adapter1, adapter2, ...rest)
+### import {h, render} from 'jsxify'
 
 Create hyperscript function for the target `container`, enabling framework adapters by `jsxify-*` packages.
 
@@ -65,11 +65,11 @@ Deploy JSX.
 Example:
 
 ```jsx
-<div container={document.body}>	// creates HTMLElement by hyperscipt
-	<VDOMWidget>				// converts virtual-dom widget to HTMLElement
-		<div>					// creates VNode by virtual-dom/h
-			<ReactComp>			// converts React.Component to virtual-dom
-				<div></div>		// creates React.Element by React.createElement
+<div container={document.body}>
+	<VDOMWidget>
+		<div>
+			<ReactComp>
+				<div></div>
 			</ReactComp>
 		</div>
 	</VDOMWidget>
@@ -92,7 +92,7 @@ Jsxify by default accepts following targets as components:
 * any object with `.element` property
 * any custom component, enabled by plugins
 
-### Framework adapters
+### [FAQ](./faq)
 
 ## Related
 
