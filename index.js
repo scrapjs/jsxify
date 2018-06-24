@@ -1,7 +1,6 @@
 'use strict'
 
 let WeakMap = require('es6-weak-map')
-let Map = require('es6-map')
 let getKey = require('primitive-pool')
 let h = require('hyperscript')
 let morph = require('morphdom')
@@ -28,8 +27,9 @@ function jsxify (target, o, children) {
 // mount tree into the container
 function render (fragment, container) {
 	if (typeof container === 'string') {
-		container = document.querySelector(container)
-		if (!container) throw Error('Cannot find element `' + o.container + '`')
+		let c = document.querySelector(container)
+		if (!c) throw Error('Cannot find element `' + container + '`')
+		container = c
 	}
 
 	if (!container) throw Error('Unknown container `' + arguments[1] + '`')
