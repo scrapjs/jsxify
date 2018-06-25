@@ -2,7 +2,6 @@
 
 let WeakMap = require('es6-weak-map')
 let getKey = require('primitive-pool')
-let h = require('hyperscript')
 let morph = require('morphdom')
 
 module.exports = jsxify
@@ -14,14 +13,15 @@ let containerStore = new WeakMap
 let instancesStore = new WeakMap
 
 // eval JSX
-function jsxify (target, o, children) {
-	if (o.container) {
-		render(o.container)
-		return null
+function jsxify (target, props, ...children) {
+	let VNode = {target, props, children}
+
+	if (props.container) {
+		render(VNode, props.container)
 	}
 
 	// TODO: normalize args here to valid [target, props, children]
-	return arguments
+	return VNode
 }
 
 // mount tree into the container
@@ -46,17 +46,19 @@ function render (fragment, container) {
 		containerStore.set(container, containerStash)
 	}
 
+	// make single fragment a list
 	if (!Array.isArray(fragment)) fragment = [fragment]
 
 	// count number of instances per target within the container
 	let targetIds = new WeakMap, targetKeys = {}
 
 	fragment.forEach((VNode) => {
-		let [target, props, children] = VNode
+		let {target, props, children} = VNode
 
 		// get target-specific instances
 		let targetKey = getKey(target)
 		let instances = containerStash.instances.get(targetKey)
+
 		if (!instances) {
 			instances = { key: {}, id: [] }
 			containerStash.instances.set(targetKey, instances)
@@ -126,7 +128,13 @@ function create (target, props, children, container) {
 	}
 
 	else if (typeof target === 'string') {
-		instance = h(target, props, children)
+		instance = document.createElement(target)
+		container.appendChild(instance)
+
+		// FIXME: apply props here, or possibly morphdom
+		if (props.id) instance.id = props.id
+
+		render(children, instance)
 	}
 
 	else if (isElement(target)) {
